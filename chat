@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Michelle's Green Café 🌿</title>
+  <style>
+    :root {
+      --base-color: #f5f1e7;
+      --accent-color: #6b8e64;
+      --accent-dark: #3e5c49;
+      --text-color: #2c2c2c;
+      --card-bg: #ffffffcc;
+      --font: 'Poppins', sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --base-color: #2a2f2b;
+      --text-color: #f5f1e7;
+      --card-bg: #3c4440;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background-color: var(--base-color);
+      color: var(--text-color);
+      transition: background 0.4s, color 0.4s;
+      background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem;
+      background-color: var(--accent-color);
+      color: #fff;
+      border-bottom: 4px solid var(--accent-dark);
+    }
+
+    .typewriter {
+      display: inline-block;
+      overflow: hidden;
+      border-right: .15em solid #fff;
+      white-space: nowrap;
+      animation: typing 3s steps(30, end), blink .75s step-end infinite;
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent }
+      50% { border-color: #fff }
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      padding: 1rem;
+      background-color: var(--card-bg);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+      z-index: 10;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--accent-dark);
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .card::after {
+      content: url('https://cdn-icons-png.flaticon.com/512/765/765613.png');
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 24px;
+      opacity: 0.2;
+    }
+
+    button {
+      background-color: var(--accent-color);
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--accent-dark);
+    }
+
+    .about img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto 1rem auto;
+      border: 4px solid var(--accent-color);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .hidden { display: none; }
+
+    ul { list-style: none; padding: 0; }
+    li { margin: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem; }
+    input[type="checkbox"] { transform: scale(1.3); cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="typewriter">Hi, I’m Michelle ☕</div>
+  </header>
+
+  <nav>
+    <a onclick="showPage('about')">About</a>
+    <a onclick="showPage('projects')">Projects</a>
+    <a onclick="showPage('tasks')">Tasks</a>
+    <a onclick="showPage('blog')">Blog</a>
+  </nav>
+
+  <main>
+    <section id="about" class="card page">
+      <img src="Michelle_Kim_Headshot.jpg" alt="Michelle portrait" style="display:block; margin:0 auto 1.2rem auto; width:140px; height:140px; border-radius:50%; object-fit:cover; border:4px solid var(--accent-color);">
+      <h2>About Me</h2>
+      <p>Welcome to my cozy corner of the internet — Michelle’s Green Café. I love coding, creativity, and coffee-fueled mornings surrounded by plants 🌱. This site reflects my vibe: calm, minimal, and inspired by nature.</p>
+    </section>
+
+    <section id="projects" class="card page hidden">
+      <h2>Projects</h2>
+      <p>Check out some of my favorite projects below (coming soon!).</p>
+    </section>
+
+    <section id="tasks" class="card page hidden">
+      <h2>Task Tracker</h2>
+      <input type="text" id="newTask" placeholder="Add a new task...">
+      <button onclick="addTask()">Add</button>
+      <ul id="taskList"></ul>
+    </section>
+
+    <section id="blog" class="card page hidden">
+      <h2>Notes & Reflections</h2>
+      <textarea id="noteText" rows="4" placeholder="Write your thoughts..."></textarea>
+      <button onclick="addNote()">Save Note</button>
+      <ul id="noteList"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Michelle’s Green Café 🌿 — brewed with love & code</p>
+  </footer>
+
+  <script>
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
+      document.getElementById(pageId).classList.remove('hidden');
+    }
+
+    function loadStorage() {
+      const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+      const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+      tasks.forEach(t => addTaskToDOM(t.text, t.done));
+      notes.forEach(n => addNoteToDOM(n));
+    }
+
+    function addTask() {
+      const input = document.getElementById('newTask');
+      const text = input.value.trim();
+      if (!text) return;
+      addTaskToDOM(text, false);
+      saveTask(text, false);
+      input.value = '';
+    }
+
+    function addTaskToDOM(text, done) {
+      const li = document.createElement('li');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = done;
+      const span = document.createElement('span');
+      span.textContent = text;
+      if (done) span.style.textDecoration = 'line-through';
+      checkbox.onchange = () => toggleTask(text, checkbox.checked, span);
+      li.appendChild(checkbox);
+      li.appendChild(span);
+      document.getElementById('taskList').appendChild(li);
+    }
+
+    function saveTask(text, done) {
+      const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+      tasks.push({ text, done });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function toggleTask(text, done, span) {
+      const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+      const updated = tasks.map(t => t.text === text ? { text, done } : t);
+      localStorage.setItem('tasks', JSON.stringify(updated));
+      span.style.textDecoration = done ? 'line-through' : 'none';
+    }
+
+    function addNote() {
+      const text = document.getElementById('noteText').value.trim();
+      if (!text) return;
+      addNoteToDOM(text);
+      const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+      notes.push(text);
+      localStorage.setItem('notes', JSON.stringify(notes));
+      document.getElementById('noteText').value = '';
+    }
+
+    function addNoteToDOM(note) {
+      const li = document.createElement('li');
+      li.textContent = note;
+      li.onclick = () => {
+        li.remove();
+        removeNote(note);
+      };
+      document.getElementById('noteList').appendChild(li);
+    }
+
+    function removeNote(note) {
+      let notes = JSON.parse(localStorage.getItem('notes') || '[]');
+      notes = notes.filter(n => n !== note);
+      localStorage.setItem('notes', JSON.stringify(notes));
+    }
+
+    loadStorage();
+  </script>
+</body>
+</html>
