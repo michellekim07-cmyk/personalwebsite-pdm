@@ -1,0 +1,15 @@
+   npm install
+   ```
+
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+3. Customize:
+   - Add your profile picture to `public/` folder
+   - Update personal info in `src/pages/About.jsx`
+   - Add your projects in `src/pages/Projects.jsx`
+   - Customize colors in `src/index.css`
+
+   npm run dev
